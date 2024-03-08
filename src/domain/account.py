@@ -1,3 +1,5 @@
+import datetime
+
 from src.domain.transactions import Transactions
 
 
@@ -8,6 +10,21 @@ class Account:
         self._id = _id
 
         self._transactions: list[Transactions] = []
+
+    def get_statement(self):
+        return {
+            "saldo": {
+                "total": self._balance,
+                "data_extrato": str(datetime.datetime.now()),
+                "limit": self._limit
+            },
+            "ultimas_transacoes": list(
+                map(
+                    lambda x: x.get_resume(),
+                    self._transactions
+                )
+            )
+        }
 
     @property
     def limit(self):

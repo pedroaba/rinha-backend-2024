@@ -20,5 +20,10 @@ class _AppState:
         self._state.append(account_four)
         self._state.append(account_five)
 
+    def get_by_id(self, account_id) -> Account:
+        for account in self._state:
+            if account.id == account_id:
+                return account
+
 
 app_state = _AppState()

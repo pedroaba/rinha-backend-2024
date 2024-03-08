@@ -1,5 +1,8 @@
 from src.routes.base import Route
-from flask import request, Response
+from flask import request, Response, abort
+from flask.json import jsonify
+
+from src.domain.app_state import app_state
 
 
 class ClientGetBalance(Route):
@@ -9,4 +12,9 @@ class ClientGetBalance(Route):
     methods = ["GET"]
 
     def dispatch_request(self, _id: int):
-        pass
+        account = app_state.get_by_id(_id)
+
+        if account is None:
+            return abort(404)
+
+        return jsonify(account.get_statement())

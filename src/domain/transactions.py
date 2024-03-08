@@ -9,6 +9,14 @@ class Transactions:
         self._description = description
         self._created_at = str(datetime.datetime.now())
 
+    def get_resume(self):
+        return {
+            "valor": self._value,
+            "tipo": self._type,
+            "descricao": self._description,
+            "realizada_em": self._created_at
+        }
+
     @property
     def value(self):
         return self._value
