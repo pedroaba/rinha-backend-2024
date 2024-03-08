@@ -1,5 +1,7 @@
 import datetime
 
+from flask import abort, jsonify
+
 from src.domain.transactions import Transactions
 
 
@@ -24,6 +26,35 @@ class Account:
                     self._transactions
                 )
             )
+        }
+
+    def make_transaction(self, payload):
+        value = payload["valor"]
+        transaction_type = payload["tipo"]
+        description = payload["descricao"]
+
+        transaction = Transactions(
+            float(value),
+            transaction_type,
+            description
+        )
+
+        match transaction_type:
+            case "c":
+                if abs(self._balance - transaction.value) <= self._limit:
+                    self._balance -= transaction.value
+                    self._transactions.append(transaction)
+                else:
+                    abort(422)
+            case "d":
+                self._balance += transaction.value
+                self._transactions.append(transaction)
+            case _:
+                abort(300)
+
+        return {
+            "limit": self._limit,
+            "saldo": self._balance
         }
 
     @property
