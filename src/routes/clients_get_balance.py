@@ -1,3 +1,5 @@
+from abc import ABC
+
 from src.routes.base import Route
 from flask import request, Response, abort
 from flask.json import jsonify
@@ -11,10 +13,13 @@ class ClientGetBalance(Route):
 
     methods = ["GET"]
 
-    def dispatch_request(self, _id: int):
+    def get(self, _id: int):
         account = app_state.get_by_id(_id)
 
         if account is None:
             return abort(404)
 
         return jsonify(account.get_statement())
+
+    def post(self):
+        raise NotImplementedError()
